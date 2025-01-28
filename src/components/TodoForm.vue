@@ -1,17 +1,43 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue'
+
+const title = ref('')
+const description = ref('')
+const items = ref([])
+
+const handleSubmit = (event) => {
+  event.preventDefault()
+  let formObj = {
+    id: items.value.length + 1,
+    title: title,
+    description: description,
+  }
+  items.value.push(formObj)
+
+  display(formObj)
+}
+
+const display = (object) => {
+  let { title, description } = object
+  const newObject = { title: title._value, description: description._value }
+  title.value = ''
+  description.value = ''
+  console.log(newObject)
+}
+</script>
 
 <template>
   <form id="form-container">
     <div id="title-container">
       <label class="input-label" for="">Title</label>
-      <input class="todo-input" type="text" />
+      <input v-model="title" class="todo-input" type="text" />
     </div>
     <div id="description-container">
       <label class="input-label" for="">Description</label>
-      <input class="todo-input" type="text" />
+      <input v-model="description" class="todo-input" type="text" />
     </div>
     <div>
-      <button class="submit-button" type="submit">Add todo</button>
+      <button class="submit-button" @click="handleSubmit" type="submit">Add todo</button>
     </div>
   </form>
 </template>
