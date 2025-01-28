@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import TodoList from './TodoList.vue'
 
 const title = ref('')
 const description = ref('')
@@ -12,17 +13,15 @@ const handleSubmit = (event) => {
     title: title,
     description: description,
   }
-  items.value.push(formObj)
-
-  display(formObj)
-}
-
-const display = (object) => {
-  let { title, description } = object
-  const newObject = { title: title._value, description: description._value }
+  displayItems(formObj)
   title.value = ''
   description.value = ''
-  console.log(newObject)
+}
+
+const displayItems = (object) => {
+  let { id, title, description } = object
+  const newObject = { title: title._value, description: description._value }
+  items.value.push(newObject)
 }
 </script>
 
@@ -40,6 +39,10 @@ const display = (object) => {
       <button class="submit-button" @click="handleSubmit" type="submit">Add todo</button>
     </div>
   </form>
+
+  <div>
+    <TodoList :items="items" />
+  </div>
 </template>
 
 <style scoped>
