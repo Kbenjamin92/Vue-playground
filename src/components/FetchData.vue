@@ -2,13 +2,14 @@
 import { ref, onMounted } from 'vue'
 
 const data = ref(null)
-const loading = ref(true)
+const loading = ref(null)
 const error = ref(null)
 
 const fetchData = async () => {
   if (!data.value) {
     try {
       const res = await fetch('https://jsonplaceholder.typicode.com/posts')
+      loading.value = true
       if (!res.ok) {
         throw new Error('Faild to fetch')
       }
@@ -18,7 +19,7 @@ const fetchData = async () => {
     } catch (err) {
       error.value = err.message
     } finally {
-      loading.value
+      loading.value = false
     }
   }
 }
@@ -27,8 +28,9 @@ const fetchData = async () => {
 <template>
   <div>
     <h2>Data from API</h2>
-    <button @click="fetchData">Click me to get api data</button>
-
+    <button class="fetch-button" @click="fetchData">Click me to get api data</button>
+    <p v-if="!data">No data yet.</p>
+    <p v-else-if="loading">Loading...</p>
     <ul>
       <li v-for="item in data" :key="item.id">{{ item.title }}</li>
     </ul>
